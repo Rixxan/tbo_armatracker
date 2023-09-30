@@ -1,0 +1,10 @@
+[
+  {
+    "name": "server1",
+    "pwd": "pass1"
+  },
+  {
+    "name": "server2",
+    "pwd": "pass2"
+  }
+]
