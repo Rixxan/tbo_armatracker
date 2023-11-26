@@ -8,6 +8,7 @@ import asyncio
 import datetime
 import configparser
 import json
+import logging as logger
 import discord
 from discord.ext import commands
 import a2s
@@ -43,7 +44,7 @@ async def get_server_info():
 @bot.event
 async def on_ready():
     """Run these actions when the bot is fully online"""
-    print("Trying purge + setup")
+    logger.info("Trying purge + setup")
     creds = await load_json()
     channel = discord.Client.get_channel(bot, int(MAINS_ID))
     bootup = await channel.send("Booting the Bot")
@@ -90,7 +91,7 @@ async def format_server_embeds(tbo, creds):
     password = creds_dict.get(tbo.server_name)
     if password:
         server_embed.add_field(name="Password", value=password)
-
+    server_embed.timestamp = datetime.datetime.now()
     return server_embed
 
 
@@ -114,6 +115,7 @@ async def format_player_embeds(players):
             )
     else:
         player_embed.add_field(name="No Players Online", value="", inline=False)
+    player_embed.timestamp = datetime.datetime.now()
     return player_embed
 
 
@@ -163,6 +165,7 @@ async def create_check(ctx, creds):
     checkmsg2 = await ctx.send(embed=player_embed)
 
     while True:
+        logger.info("Polling Server")
         await asyncio.sleep(5)
         tbo, players = await get_server_info()
 
